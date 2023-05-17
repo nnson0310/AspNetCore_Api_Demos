@@ -1,4 +1,4 @@
-namespace AspCoreWebAPIDemos
+namespace AspCoreWebAPIDemos.Models
 {
     public class WeatherForecast
     {
