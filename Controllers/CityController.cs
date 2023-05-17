@@ -21,7 +21,7 @@ namespace AspCoreWebAPIDemos.Controllers
             return Ok(dataStore.Cities);
         }
 
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public ActionResult<City> GetCity(int id)
         {
             City? city = new CitiesDataStore().Cities.FirstOrDefault(city => city.Id == id);
