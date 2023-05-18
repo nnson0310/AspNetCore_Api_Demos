@@ -11,7 +11,7 @@ namespace AspCoreWebAPIDemos.Controllers
         [HttpGet]
         public ActionResult<List<City>> GetAllCities()
         {
-            CitiesDataStore dataStore = new CitiesDataStore();
+            CitiesDataStore dataStore = new();
 
             if (dataStore.Cities is null)
             {

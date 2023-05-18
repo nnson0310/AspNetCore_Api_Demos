@@ -10,6 +10,8 @@ namespace AspCoreWebAPIDemos.Models
         public string? Description { get; set; } 
 
         public List<District>? Districts { get; set; }
+
+        public List<Rate>? PointRate { get; set; }
     }
 
     public class District
