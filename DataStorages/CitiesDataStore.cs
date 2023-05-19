@@ -3,7 +3,7 @@ using AspCoreWebAPIDemos.Models;
 
 namespace AspCoreWebAPIDemos.DataStorages
 {
-    public class CitiesDataStore 
+    public class CitiesDataStore
     {
         public List<City> Cities { get; set; }
 
@@ -32,6 +32,21 @@ namespace AspCoreWebAPIDemos.DataStorages
                             Name = "Hoan Kiem",
                             Address = "City central"
                         }
+                    },
+                    PointRate = new List<Rate>()
+                    {
+                        new Rate()
+                        {
+                            Id = 1,
+                            GuestName = "Micheal Truong",
+                            Point = 10
+                        },
+                        new Rate()
+                        {
+                            Id = 2,
+                            GuestName = "Sarah Nguyen",
+                            Point = 7
+                        }
                     }
                 },
                 new City()
@@ -47,13 +62,43 @@ namespace AspCoreWebAPIDemos.DataStorages
                             Name = "Quan 1",
                             Address = "City Central"
                         }
+                    },
+                    PointRate = new List<Rate>()
+                    {
+                        new Rate()
+                        {
+                            Id = 1,
+                            GuestName = "Mario Duc",
+                            Point = 3
+                        },
+                        new Rate()
+                        {
+                            Id = 2,
+                            GuestName = "Thor",
+                            Point = 8
+                        }
                     }
                 },
                 new City()
                 {
                     Id = 3,
                     Name = "Bangkok",
-                    Description = "Thailand capital"
+                    Description = "Thailand capital",
+                    PointRate = new List<Rate>()
+                    {
+                        new Rate()
+                        {
+                            Id = 1,
+                            GuestName = "Scarlet witch",
+                            Point = 5
+                        },
+                        new Rate()
+                        {
+                            Id = 2,
+                            GuestName = "Captain America",
+                            Point = 6
+                        }
+                    }
                 }
             };
         }
