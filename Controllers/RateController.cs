@@ -1,5 +1,6 @@
 ﻿using AspCoreWebAPIDemos.DataStorages;
 using AspCoreWebAPIDemos.Models;
+using AspCoreWebAPIDemos.Services;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,15 @@ namespace AspCoreWebAPIDemos.Controllers
     [ApiController]
     public class RateController : ControllerBase
     {
+        private ILogger<RateController> _logger;
+        private IMailService _mailService;
+
+        public RateController(ILogger<RateController> logger, IMailService mailService)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _mailService = mailService ?? throw new ArgumentNullException(nameof(mailService));
+        }
+
         [HttpGet("{rateId}", Name = "GetRateOfCity")]
         [Produces("application/json")]
         public ActionResult<Rate> SubmitRate(int cityId, int rateId)
@@ -154,6 +164,7 @@ namespace AspCoreWebAPIDemos.Controllers
             }
 
             city.PointRate!.Remove(updateRate);
+            _mailService.Send("Delete Rate", $"The rate with id = {rateId} of city id = {cityId} is deleted");
 
             return NoContent();
         }

@@ -8,6 +8,13 @@ namespace AspCoreWebAPIDemos.Controllers
     [ApiController]
     public class CityController : ControllerBase
     {
+        private readonly ILogger<CityController> _logger;
+
+        public CityController(ILogger<CityController> logger)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
         [HttpGet]
         public ActionResult<List<City>> GetAllCities()
         {
@@ -28,6 +35,7 @@ namespace AspCoreWebAPIDemos.Controllers
 
             if (city is null)
             {
+                _logger.LogError("Can not get city info with city id = {id}", id);
                 return NotFound();
             }
 
