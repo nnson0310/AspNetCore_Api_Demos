@@ -1,9 +1,8 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace AspCoreWebAPIDemos.Models
 {
-    public class RateForCreation
+    public class RateForUpdate
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "Guest name is required")]
         [MaxLength(20, ErrorMessage = "Guest name must be less than 20 characters")]

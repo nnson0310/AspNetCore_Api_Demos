@@ -1,5 +1,6 @@
 ﻿using AspCoreWebAPIDemos.DataStorages;
 using AspCoreWebAPIDemos.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspCoreWebAPIDemos.Controllers
@@ -61,6 +62,100 @@ namespace AspCoreWebAPIDemos.Controllers
                     rateId = finalSubmittedRate.Id,
                 },
                 finalSubmittedRate);
+        }
+
+        [HttpPut("{rateId}")]
+        [Produces("application/json")]
+        public ActionResult<Rate> UpdateRate(
+            int cityId,
+            int rateId,
+            [FromBody] RateForUpdate rateForUpdate)
+        {
+            var city = CitiesDataStore.CitiesData.Cities.FirstOrDefault(c => c.Id == cityId);
+
+            if (city is null)
+            {
+                return NotFound("There is no matching city");
+            }
+
+            var updateRate = city.PointRate!.FirstOrDefault(r => r.Id == rateId);
+            if (updateRate is null)
+            {
+                return NotFound("There is no matching rate");
+            }
+
+            updateRate.GuestName = rateForUpdate.GuestName;
+            updateRate.Point = rateForUpdate.Point;
+
+            return NoContent();
+        }
+
+        [HttpPatch("{rateId}")]
+        [Produces("application/json")]
+        public ActionResult<Rate> UpdateRatePartial(
+            int cityId,
+            int rateId,
+            [FromBody] JsonPatchDocument<RateForUpdate> rateForUpdate)
+        {
+            var city = CitiesDataStore.CitiesData.Cities.FirstOrDefault(c => c.Id == cityId);
+
+            if (city is null)
+            {
+                return NotFound("There is no matching city");
+            }
+
+            var updateRate = city.PointRate!.FirstOrDefault(r => r.Id == rateId);
+            if (updateRate is null)
+            {
+                return NotFound("There is no matching rate");
+            }
+
+            var partialRateUpdate = new RateForUpdate()
+            {
+                GuestName = updateRate.GuestName,
+                Point = updateRate.Point
+            };
+
+            rateForUpdate.ApplyTo(partialRateUpdate, ModelState);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!TryValidateModel(rateForUpdate))
+            {
+                return BadRequest(ModelState);
+            }
+
+            updateRate.GuestName = partialRateUpdate.GuestName;
+            updateRate.Point = partialRateUpdate.Point;
+
+            return NoContent();
+        }
+
+        [HttpDelete("{rateId}")]
+        [Produces("application/json")]
+        public ActionResult<Rate> DeleteRate(
+            int cityId,
+            int rateId)
+        {
+            var city = CitiesDataStore.CitiesData.Cities.FirstOrDefault(c => c.Id == cityId);
+
+            if (city is null)
+            {
+                return NotFound("There is no matching city");
+            }
+
+            var updateRate = city.PointRate!.FirstOrDefault(r => r.Id == rateId);
+            if (updateRate is null)
+            {
+                return NotFound("There is no matching rate");
+            }
+
+            city.PointRate!.Remove(updateRate);
+
+            return NoContent();
         }
     }
 }
