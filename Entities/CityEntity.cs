@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AspCoreWebAPIDemos.Entities
 {
-    public class City
+    public class CityEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,11 +17,11 @@ namespace AspCoreWebAPIDemos.Entities
         [MaxLength(200)]
         public string? Description { get; set; }
 
-        public ICollection<District>? Districts { get; set; } = new List<District>();
+        public List<District>? Districts { get; set; } = new List<District>();
 
-        public IEnumerable<Rate>? Rates { get; set; }
+        public List<RateEntity>? Rates { get; set; }
 
-        public City(string name)
+        public CityEntity(string name)
         {
             Name = name;
         }

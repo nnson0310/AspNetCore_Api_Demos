@@ -1,6 +1,8 @@
 ﻿using AspCoreWebAPIDemos.DataStorages;
+using AspCoreWebAPIDemos.Entities;
 using AspCoreWebAPIDemos.Models;
 using AspCoreWebAPIDemos.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspCoreWebAPIDemos.Controllers
@@ -11,15 +13,20 @@ namespace AspCoreWebAPIDemos.Controllers
     {
         private readonly ILogger<CityController> _logger;
         private readonly ICityInfoRepository _cityInfoRepository;
+        private readonly IMapper _mapper;
 
-        public CityController(ILogger<CityController> logger, ICityInfoRepository cityInfoRepository)
+        public CityController(
+            ILogger<CityController> logger, 
+            ICityInfoRepository cityInfoRepository,
+            IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _cityInfoRepository = cityInfoRepository ?? throw new ArgumentNullException(nameof(cityInfoRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet]
-        public ActionResult<List<City>> GetAllCities()
+        public async Task<ActionResult<List<CityWithoutRate>>> GetAllCities()
         {
             //CitiesDataStore dataStore = new();
 
@@ -30,18 +37,18 @@ namespace AspCoreWebAPIDemos.Controllers
 
             //return Ok(dataStore.Cities);
 
-            var cities = _cityInfoRepository.GetCitiesAsync();
+            var cities = await _cityInfoRepository.GetCitiesAsync();
             if (cities is null)
             {
                 return NotFound();
             }
-            return Ok(cities);
+            return Ok(_mapper.Map<List<CityWithoutRate>>(cities));
         }
 
         [HttpGet("{id}")]
-        public ActionResult<City> GetCity(int id)
+        public async Task<IActionResult> GetCity(int id, bool includeRate = false)
         {
-            City? city = new CitiesDataStore().Cities.FirstOrDefault(city => city.Id == id);
+            var city = await _cityInfoRepository.GetCityAsync(id, includeRate);
 
             if (city is null)
             {
@@ -49,7 +56,12 @@ namespace AspCoreWebAPIDemos.Controllers
                 return NotFound();
             }
 
-            return Ok(city);
+            if (includeRate)
+            {
+                return Ok(_mapper.Map<City>(city));
+            }
+
+            return Ok(_mapper.Map<CityWithoutRate>(city));
         }
     }
 }

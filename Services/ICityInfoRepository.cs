@@ -4,12 +4,12 @@ namespace AspCoreWebAPIDemos.Services
 {
     public interface ICityInfoRepository
     {
-        Task<IEnumerable<City>> GetCitiesAsync();
+        Task<IEnumerable<CityEntity>> GetCitiesAsync();
 
-        Task<City?> GetCityAsync(int cityId, bool includeRate);
+        Task<CityEntity?> GetCityAsync(int cityId, bool includeRate);
 
-        Task<IEnumerable<Rate>> GetRatesAsync(int cityId);
+        Task<IEnumerable<RateEntity>> GetRatesAsync(int cityId);
 
-        Task<Rate?> GetRateAsync(int cityId, int rateId);
+        Task<RateEntity?> GetRateAsync(int cityId, int rateId);
     }
 }

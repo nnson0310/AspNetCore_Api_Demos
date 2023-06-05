@@ -30,6 +30,7 @@ builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 builder.Services.AddTransient<IMailService, LocalMailService>();
 builder.Services.AddDbContext<CityContext>(dbContextOptions => dbContextOptions.UseSqlite("Data Source=City.db"));
 builder.Services.AddScoped<ICityInfoRepository, CityInfoRepository>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

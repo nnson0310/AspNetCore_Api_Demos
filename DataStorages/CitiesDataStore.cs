@@ -33,7 +33,7 @@ namespace AspCoreWebAPIDemos.DataStorages
                             Address = "City central"
                         }
                     },
-                    PointRate = new List<Rate>()
+                    Rates = new List<Rate>()
                     {
                         new Rate()
                         {
@@ -63,7 +63,7 @@ namespace AspCoreWebAPIDemos.DataStorages
                             Address = "City Central"
                         }
                     },
-                    PointRate = new List<Rate>()
+                    Rates = new List<Rate>()
                     {
                         new Rate()
                         {
@@ -84,7 +84,7 @@ namespace AspCoreWebAPIDemos.DataStorages
                     Id = 3,
                     Name = "Bangkok",
                     Description = "Thailand capital",
-                    PointRate = new List<Rate>()
+                    Rates = new List<Rate>()
                     {
                         new Rate()
                         {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AspCoreWebAPIDemos.Entities
 {
-    public class Rate
+    public class RateEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -14,7 +14,7 @@ namespace AspCoreWebAPIDemos.Entities
         public int? Point { get; set; }
 
         [ForeignKey("CityId")]
-        public City? City { get; set; }  
+        public CityEntity? City { get; set; }  
 
         public int CityId { get; set; }
     }

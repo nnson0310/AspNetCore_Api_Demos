@@ -30,7 +30,7 @@ namespace AspCoreWebAPIDemos.Controllers
                 return NotFound("There is no matching city");
             }
 
-            var rate = city.PointRate!.FirstOrDefault(r => r.Id == rateId);
+            var rate = city.Rates!.FirstOrDefault(r => r.Id == rateId);
 
             if (rate is null)
             {
@@ -53,7 +53,7 @@ namespace AspCoreWebAPIDemos.Controllers
                 return NotFound("There is no matching city");
             }
 
-            var lastestRateId = city.PointRate!.Max(p => p.Id);
+            var lastestRateId = city.Rates!.Max(p => p.Id);
 
             var finalSubmittedRate = new Rate()
             {
@@ -62,7 +62,7 @@ namespace AspCoreWebAPIDemos.Controllers
                 Point = rateForCreation.Point,
             };
 
-            city.PointRate!.Add(finalSubmittedRate);
+            city.Rates!.Add(finalSubmittedRate);
 
             return CreatedAtRoute(
                 "GetRateOfCity",
@@ -88,7 +88,7 @@ namespace AspCoreWebAPIDemos.Controllers
                 return NotFound("There is no matching city");
             }
 
-            var updateRate = city.PointRate!.FirstOrDefault(r => r.Id == rateId);
+            var updateRate = city.Rates!.FirstOrDefault(r => r.Id == rateId);
             if (updateRate is null)
             {
                 return NotFound("There is no matching rate");
@@ -114,7 +114,7 @@ namespace AspCoreWebAPIDemos.Controllers
                 return NotFound("There is no matching city");
             }
 
-            var updateRate = city.PointRate!.FirstOrDefault(r => r.Id == rateId);
+            var updateRate = city.Rates!.FirstOrDefault(r => r.Id == rateId);
             if (updateRate is null)
             {
                 return NotFound("There is no matching rate");
@@ -157,13 +157,13 @@ namespace AspCoreWebAPIDemos.Controllers
                 return NotFound("There is no matching city");
             }
 
-            var updateRate = city.PointRate!.FirstOrDefault(r => r.Id == rateId);
+            var updateRate = city.Rates!.FirstOrDefault(r => r.Id == rateId);
             if (updateRate is null)
             {
                 return NotFound("There is no matching rate");
             }
 
-            city.PointRate!.Remove(updateRate);
+            city.Rates!.Remove(updateRate);
             _mailService.Send("Delete Rate", $"The rate with id = {rateId} of city id = {cityId} is deleted");
 
             return NoContent();

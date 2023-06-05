@@ -5,9 +5,9 @@ namespace AspCoreWebAPIDemos.DBContexts
 {
     public class CityContext: DbContext
     {
-        public DbSet<City> City { get; set; }
+        public DbSet<CityEntity> City { get; set; }
 
-        public DbSet<Rate> Rate { get; set; } 
+        public DbSet<RateEntity> Rate { get; set; } 
 
         public CityContext(DbContextOptions<CityContext> options): base(options)
         {
@@ -16,18 +16,18 @@ namespace AspCoreWebAPIDemos.DBContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<City>().HasData(
-                new City("Ha Noi")
+            modelBuilder.Entity<CityEntity>().HasData(
+                new CityEntity("Ha Noi")
                 {
                     Id = 1,
                     Description = "This is Viet Nam capital"
                 },
-                 new City("Bangkok")
+                 new CityEntity("Bangkok")
                  {
                      Id = 2,
                      Description = "This is Thai Lan capital"
                  },
-                  new City("Beijing")
+                  new CityEntity("Beijing")
                   {
                       Id = 3,
                       Description = "This is a very big city of China"

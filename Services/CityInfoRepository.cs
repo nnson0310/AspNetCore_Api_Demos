@@ -13,12 +13,12 @@ namespace AspCoreWebAPIDemos.Services
             _cityContext = cityContext ?? throw new ArgumentNullException(nameof(cityContext));
         }
 
-        public async Task<IEnumerable<City>> GetCitiesAsync()
+        public async Task<IEnumerable<CityEntity>> GetCitiesAsync()
         {
             return await _cityContext.City.OrderBy(c => c.Name).ToListAsync();
         }
 
-        public async Task<City?> GetCityAsync(int cityId, bool includeRate)
+        public async Task<CityEntity?> GetCityAsync(int cityId, bool includeRate)
         {
             if (includeRate)
             {
@@ -27,12 +27,12 @@ namespace AspCoreWebAPIDemos.Services
             return await _cityContext.City.Where(c => c.Id == cityId).FirstOrDefaultAsync();
         }
 
-        public async Task<Rate?> GetRateAsync(int cityId, int rateId)
+        public async Task<RateEntity?> GetRateAsync(int cityId, int rateId)
         {
             return await _cityContext.Rate.Where(r => r.CityId == cityId && r.Id == rateId).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Rate>> GetRatesAsync(int cityId)
+        public async Task<IEnumerable<RateEntity>> GetRatesAsync(int cityId)
         {
             return await _cityContext.Rate.Where(r => r.CityId == cityId).ToListAsync();
         }
