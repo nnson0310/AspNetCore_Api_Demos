@@ -19,6 +19,8 @@ namespace AspCoreWebAPIDemos.Entities
 
         public ICollection<District>? Districts { get; set; } = new List<District>();
 
+        public IEnumerable<Rate>? Rates { get; set; }
+
         public City(string name)
         {
             Name = name;

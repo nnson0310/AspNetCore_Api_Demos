@@ -1,5 +1,6 @@
 ﻿using AspCoreWebAPIDemos.DataStorages;
 using AspCoreWebAPIDemos.Models;
+using AspCoreWebAPIDemos.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspCoreWebAPIDemos.Controllers
@@ -9,23 +10,32 @@ namespace AspCoreWebAPIDemos.Controllers
     public class CityController : ControllerBase
     {
         private readonly ILogger<CityController> _logger;
+        private readonly ICityInfoRepository _cityInfoRepository;
 
-        public CityController(ILogger<CityController> logger)
+        public CityController(ILogger<CityController> logger, ICityInfoRepository cityInfoRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _cityInfoRepository = cityInfoRepository ?? throw new ArgumentNullException(nameof(cityInfoRepository));
         }
 
         [HttpGet]
         public ActionResult<List<City>> GetAllCities()
         {
-            CitiesDataStore dataStore = new();
+            //CitiesDataStore dataStore = new();
 
-            if (dataStore.Cities is null)
+            //if (dataStore.Cities is null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return Ok(dataStore.Cities);
+
+            var cities = _cityInfoRepository.GetCitiesAsync();
+            if (cities is null)
             {
                 return NotFound();
             }
-
-            return Ok(dataStore.Cities);
+            return Ok(cities);
         }
 
         [HttpGet("{id}")]

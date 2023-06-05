@@ -1,6 +1,4 @@
 ﻿
-using System.ComponentModel.DataAnnotations;
-
 namespace AspCoreWebAPIDemos.Models
 {
     public class Rate

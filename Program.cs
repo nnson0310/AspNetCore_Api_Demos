@@ -29,6 +29,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 builder.Services.AddTransient<IMailService, LocalMailService>();
 builder.Services.AddDbContext<CityContext>(dbContextOptions => dbContextOptions.UseSqlite("Data Source=City.db"));
+builder.Services.AddScoped<ICityInfoRepository, CityInfoRepository>();
 
 var app = builder.Build();
 
