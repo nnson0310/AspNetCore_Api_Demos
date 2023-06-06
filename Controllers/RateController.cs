@@ -1,6 +1,7 @@
 ﻿using AspCoreWebAPIDemos.DataStorages;
 using AspCoreWebAPIDemos.Models;
 using AspCoreWebAPIDemos.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,16 +13,24 @@ namespace AspCoreWebAPIDemos.Controllers
     {
         private ILogger<RateController> _logger;
         private IMailService _mailService;
+        private ICityInfoRepository _cityInfoRepository;
+        private IMapper _mapper;
 
-        public RateController(ILogger<RateController> logger, IMailService mailService)
+        public RateController(
+            ILogger<RateController> logger,
+            IMailService mailService,
+            IMapper mapper,
+            ICityInfoRepository cityInfoRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _mailService = mailService ?? throw new ArgumentNullException(nameof(mailService));
+            _cityInfoRepository = cityInfoRepository ?? throw new ArgumentNullException(nameof(cityInfoRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet("{rateId}", Name = "GetRateOfCity")]
         [Produces("application/json")]
-        public ActionResult<Rate> SubmitRate(int cityId, int rateId)
+        public ActionResult<Rate> GetRateOfCity(int cityId, int rateId)
         {
             var city = CitiesDataStore.CitiesData.Cities.FirstOrDefault(c => c.Id == cityId);
 
@@ -38,6 +47,20 @@ namespace AspCoreWebAPIDemos.Controllers
             }
 
             return Ok(rate);
+        }
+
+        [HttpGet("", Name = "GetAllRatesOfCity")]
+        [Produces("application/json")]
+        public ActionResult<Rate> GetAllRatesOfCity(int cityId)
+        {
+            var rates = _cityInfoRepository.GetRatesAsync(cityId);
+
+            if (rates is null)
+            {
+                return NotFound("This city has no rates yet");
+            }
+
+            return Ok(rates);
         }
 
         [HttpPost]

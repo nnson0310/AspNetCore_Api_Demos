@@ -3,15 +3,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspCoreWebAPIDemos.DBContexts
 {
-    public class CityContext: DbContext
+    public class CityContext : DbContext
     {
         public DbSet<CityEntity> City { get; set; }
 
-        public DbSet<RateEntity> Rate { get; set; } 
+        public DbSet<RateEntity> Rate { get; set; }
 
-        public CityContext(DbContextOptions<CityContext> options): base(options)
+        public CityContext(DbContextOptions<CityContext> options) : base(options)
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,6 +32,29 @@ namespace AspCoreWebAPIDemos.DBContexts
                       Id = 3,
                       Description = "This is a very big city of China"
                   });
+
+            modelBuilder.Entity<RateEntity>().HasData(
+                new RateEntity()
+                {
+                    Id = 1,
+                    CityId = 1,
+                    GuestName = "Nguyen Son",
+                    Point = 10
+                },
+                new RateEntity()
+                {
+                    Id = 2,
+                    CityId = 1,
+                    GuestName = "Thu Huong",
+                    Point = 7
+                },
+                new RateEntity()
+                {
+                    Id = 3,
+                    CityId = 2,
+                    GuestName = "David Micheal",
+                    Point = 8
+                });
         }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
