@@ -51,10 +51,31 @@ namespace AspCoreWebAPIDemos.DBContexts
                 new RateEntity()
                 {
                     Id = 3,
+                    CityId = 1,
+                    GuestName = "Sarah Chalez",
+                    Point = 4
+                },
+                new RateEntity()
+                {
+                    Id = 4,
                     CityId = 2,
                     GuestName = "David Micheal",
                     Point = 8
-                });
+                },
+                 new RateEntity()
+                 {
+                     Id = 5,
+                     CityId = 2,
+                     GuestName = "Mariah Ozawa",
+                     Point = 6
+                 },
+                  new RateEntity()
+                  {
+                      Id = 6,
+                      CityId = 3,
+                      GuestName = "Okata Mutan",
+                      Point = 9
+                  });
         }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

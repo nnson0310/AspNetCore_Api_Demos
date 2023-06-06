@@ -27,6 +27,11 @@ namespace AspCoreWebAPIDemos.Services
             return await _cityContext.City.Where(c => c.Id == cityId).FirstOrDefaultAsync();
         }
 
+        public async Task<bool> DoesCityExist(int cityId)
+        {
+            return await _cityContext.City.AnyAsync(c => c.Id == cityId);
+        }
+
         public async Task<RateEntity?> GetRateAsync(int cityId, int rateId)
         {
             return await _cityContext.Rate.Where(r => r.CityId == cityId && r.Id == rateId).FirstOrDefaultAsync();

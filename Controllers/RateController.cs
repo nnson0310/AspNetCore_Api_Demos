@@ -30,37 +30,40 @@ namespace AspCoreWebAPIDemos.Controllers
 
         [HttpGet("{rateId}", Name = "GetRateOfCity")]
         [Produces("application/json")]
-        public ActionResult<Rate> GetRateOfCity(int cityId, int rateId)
+        public async Task<IActionResult> GetRateOfCity(int cityId, int rateId)
         {
-            var city = CitiesDataStore.CitiesData.Cities.FirstOrDefault(c => c.Id == cityId);
-
-            if (city is null)
+            if (!await _cityInfoRepository.DoesCityExist(cityId))
             {
-                return NotFound("There is no matching city");
+                return NotFound($"Can not find city with id = {cityId}");
             }
 
-            var rate = city.Rates!.FirstOrDefault(r => r.Id == rateId);
+            var rate = await _cityInfoRepository.GetRateAsync(cityId, rateId);
 
             if (rate is null)
             {
-                return NotFound("There is no matching rate");
+                return NotFound($"Can not find rate with id = {rateId}");
             }
 
-            return Ok(rate);
+            return Ok(_mapper.Map<Rate>(rate));
         }
 
         [HttpGet("", Name = "GetAllRatesOfCity")]
         [Produces("application/json")]
-        public ActionResult<Rate> GetAllRatesOfCity(int cityId)
+        public async Task<ActionResult<List<Rate>>> GetAllRatesOfCity(int cityId)
         {
-            var rates = _cityInfoRepository.GetRatesAsync(cityId);
+            if (!await _cityInfoRepository.DoesCityExist(cityId))
+            {
+                return NotFound($"Can not find city with id = {cityId}");
+            }
+
+            var rates = await _cityInfoRepository.GetRatesAsync(cityId);
 
             if (rates is null)
             {
                 return NotFound("This city has no rates yet");
             }
 
-            return Ok(rates);
+            return Ok(_mapper.Map<List<Rate>>(rates));
         }
 
         [HttpPost]
