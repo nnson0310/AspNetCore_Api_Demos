@@ -2,16 +2,19 @@
 using AspCoreWebAPIDemos.Entities;
 using AspCoreWebAPIDemos.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace AspCoreWebAPIDemos.Services
 {
     public class CityInfoRepository : ICityInfoRepository
     {
         private readonly CityContext _cityContext;
+        private readonly ILogger<CityInfoRepository> _logger;
 
-        public CityInfoRepository(CityContext cityContext)
+        public CityInfoRepository(CityContext cityContext, ILogger<CityInfoRepository> logger)
         {
             _cityContext = cityContext ?? throw new ArgumentNullException(nameof(cityContext));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<IEnumerable<CityEntity>> GetCitiesAsync()
@@ -45,17 +48,21 @@ namespace AspCoreWebAPIDemos.Services
 
         public async Task AddRate(int cityId, RateEntity newRate)
         {
-            var city = await GetCityAsync(cityId, false);
-            if (city != null)
+            var city = await GetCityAsync(cityId, true);
+            if (city != null && city.Rates != null)
             {
-                Console.WriteLine(city.Rates);
-                city.Rates!.Add(newRate);
+                city.Rates.Add(newRate);
             }
         }
 
         public async Task<bool> SaveChangesAsync()
         {
             return await _cityContext.SaveChangesAsync() >= 0;
+        }
+
+        public void DeleteRate(RateEntity rate)
+        {
+            _cityContext.Rate.Remove(rate);
         }
     }
 }

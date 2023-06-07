@@ -98,57 +98,50 @@ namespace AspCoreWebAPIDemos.Controllers
 
         [HttpPut("{rateId}")]
         [Produces("application/json")]
-        public ActionResult<Rate> UpdateRate(
+        public async Task<ActionResult<Rate>> UpdateRate(
             int cityId,
             int rateId,
             [FromBody] RateForUpdate rateForUpdate)
         {
-            var city = CitiesDataStore.CitiesData.Cities.FirstOrDefault(c => c.Id == cityId);
-
-            if (city is null)
+            if (!await _cityInfoRepository.DoesCityExist(cityId))
             {
-                return NotFound("There is no matching city");
+                return NotFound($"Can not find city with id = {cityId}");
             }
 
-            var updateRate = city.Rates!.FirstOrDefault(r => r.Id == rateId);
+            var updateRate = await _cityInfoRepository.GetRateAsync(cityId, rateId);
             if (updateRate is null)
             {
                 return NotFound("There is no matching rate");
             }
 
-            updateRate.GuestName = rateForUpdate.GuestName;
-            updateRate.Point = rateForUpdate.Point;
+            _mapper.Map(rateForUpdate, updateRate);
+
+            await _cityInfoRepository.SaveChangesAsync();
 
             return NoContent();
         }
 
         [HttpPatch("{rateId}")]
         [Produces("application/json")]
-        public ActionResult<Rate> UpdateRatePartial(
+        public async Task<ActionResult<Rate>> UpdateRatePartial(
             int cityId,
             int rateId,
             [FromBody] JsonPatchDocument<RateForUpdate> rateForUpdate)
         {
-            var city = CitiesDataStore.CitiesData.Cities.FirstOrDefault(c => c.Id == cityId);
-
-            if (city is null)
+            if (!await _cityInfoRepository.DoesCityExist(cityId))
             {
-                return NotFound("There is no matching city");
+                return NotFound($"Can not find city with id = {cityId}");
             }
 
-            var updateRate = city.Rates!.FirstOrDefault(r => r.Id == rateId);
-            if (updateRate is null)
+            var rateNeedUpdate = await _cityInfoRepository.GetRateAsync(cityId, rateId);
+            if (rateNeedUpdate is null)
             {
-                return NotFound("There is no matching rate");
+                return NotFound($"There is no rate matching with id = {rateId}");
             }
 
-            var partialRateUpdate = new RateForUpdate()
-            {
-                GuestName = updateRate.GuestName,
-                Point = updateRate.Point
-            };
+            var partialUpdateRate = _mapper.Map<RateForUpdate>(rateNeedUpdate);
 
-            rateForUpdate.ApplyTo(partialRateUpdate, ModelState);
+            rateForUpdate.ApplyTo(partialUpdateRate, ModelState);
 
             if (!ModelState.IsValid)
             {
@@ -160,32 +153,33 @@ namespace AspCoreWebAPIDemos.Controllers
                 return BadRequest(ModelState);
             }
 
-            updateRate.GuestName = partialRateUpdate.GuestName;
-            updateRate.Point = partialRateUpdate.Point;
+            _mapper.Map(partialUpdateRate, rateNeedUpdate);
+
+            await _cityInfoRepository.SaveChangesAsync();
 
             return NoContent();
         }
 
         [HttpDelete("{rateId}")]
         [Produces("application/json")]
-        public ActionResult<Rate> DeleteRate(
+        public async Task<ActionResult<Rate>> DeleteRate(
             int cityId,
             int rateId)
         {
-            var city = CitiesDataStore.CitiesData.Cities.FirstOrDefault(c => c.Id == cityId);
-
-            if (city is null)
+            if (!await _cityInfoRepository.DoesCityExist(cityId))
             {
-                return NotFound("There is no matching city");
+                return NotFound($"Can not find city with id = {cityId}");
             }
 
-            var updateRate = city.Rates!.FirstOrDefault(r => r.Id == rateId);
-            if (updateRate is null)
+            var deleteRate = await _cityInfoRepository.GetRateAsync(cityId, rateId);
+            if (deleteRate is null)
             {
-                return NotFound("There is no matching rate");
+                return NotFound($"There is no rate matching with id = {rateId}");
             }
 
-            city.Rates!.Remove(updateRate);
+            _cityInfoRepository.DeleteRate(deleteRate);
+            await _cityInfoRepository.SaveChangesAsync();
+
             _mailService.Send("Delete Rate", $"The rate with id = {rateId} of city id = {cityId} is deleted");
 
             return NoContent();

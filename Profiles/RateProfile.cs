@@ -8,6 +8,8 @@ namespace AspCoreWebAPIDemos.Profiles
         {
             CreateMap<Entities.RateEntity, Models.Rate>();
             CreateMap<Models.RateForCreation, Entities.RateEntity>();
+            CreateMap<Models.RateForUpdate, Entities.RateEntity>();
+            CreateMap<Entities.RateEntity, Models.RateForUpdate>();
         }
     }
 }

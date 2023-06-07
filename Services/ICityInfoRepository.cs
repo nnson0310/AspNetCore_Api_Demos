@@ -19,5 +19,7 @@ namespace AspCoreWebAPIDemos.Services
         Task AddRate(int cityId, RateEntity newRate);
 
         Task<bool> SaveChangesAsync();
+
+        void DeleteRate(RateEntity rate);
     }
 }
