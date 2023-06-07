@@ -1,5 +1,6 @@
 ﻿using AspCoreWebAPIDemos.DBContexts;
 using AspCoreWebAPIDemos.Entities;
+using AspCoreWebAPIDemos.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspCoreWebAPIDemos.Services
@@ -40,6 +41,21 @@ namespace AspCoreWebAPIDemos.Services
         public async Task<IEnumerable<RateEntity>> GetRatesAsync(int cityId)
         {
             return await _cityContext.Rate.Where(r => r.CityId == cityId).ToListAsync();
+        }
+
+        public async Task AddRate(int cityId, RateEntity newRate)
+        {
+            var city = await GetCityAsync(cityId, false);
+            if (city != null)
+            {
+                Console.WriteLine(city.Rates);
+                city.Rates!.Add(newRate);
+            }
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await _cityContext.SaveChangesAsync() >= 0;
         }
     }
 }

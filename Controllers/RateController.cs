@@ -1,4 +1,5 @@
 ﻿using AspCoreWebAPIDemos.DataStorages;
+using AspCoreWebAPIDemos.Entities;
 using AspCoreWebAPIDemos.Models;
 using AspCoreWebAPIDemos.Services;
 using AutoMapper;
@@ -68,36 +69,31 @@ namespace AspCoreWebAPIDemos.Controllers
 
         [HttpPost]
         [Produces("application/json")]
-        public ActionResult<Rate> SubmitRate(
+        public async Task<ActionResult<Rate>> CreateNewRate(
             int cityId,
-            [FromBody] RateForCreation rateForCreation)
+            [FromBody] RateForCreation newRate)
         {
-            var city = CitiesDataStore.CitiesData.Cities.FirstOrDefault(c => c.Id == cityId);
-
-            if (city is null)
+            if (!await _cityInfoRepository.DoesCityExist(cityId))
             {
-                return NotFound("There is no matching city");
+                return NotFound($"Can not find city with id = {cityId}");
             }
 
-            var lastestRateId = city.Rates!.Max(p => p.Id);
+            var lastestRate = _mapper.Map<RateEntity>(newRate);
 
-            var finalSubmittedRate = new Rate()
-            {
-                Id = ++lastestRateId,
-                GuestName = rateForCreation.GuestName,
-                Point = rateForCreation.Point,
-            };
+            await _cityInfoRepository.AddRate(cityId, lastestRate);
 
-            city.Rates!.Add(finalSubmittedRate);
+            await _cityInfoRepository.SaveChangesAsync();
+
+            var submittedLastestRate = _mapper.Map<Rate>(lastestRate);
 
             return CreatedAtRoute(
                 "GetRateOfCity",
                 new
                 {
                     cityId = cityId,
-                    rateId = finalSubmittedRate.Id,
+                    rateId = submittedLastestRate.Id,
                 },
-                finalSubmittedRate);
+                submittedLastestRate);
         }
 
         [HttpPut("{rateId}")]

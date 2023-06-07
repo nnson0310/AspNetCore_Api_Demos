@@ -5,6 +5,9 @@ namespace AspCoreWebAPIDemos.Models
 {
     public class RateForCreation
     {
+        [Required]
+        public int Id { get; set; }
+
         [Required(AllowEmptyStrings = false, ErrorMessage = "Guest name is required")]
         [MaxLength(20, ErrorMessage = "Guest name must be less than 20 characters")]
         public string? GuestName { get; set; }

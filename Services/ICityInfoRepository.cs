@@ -1,5 +1,6 @@
 ﻿using AspCoreWebAPIDemos.DBContexts;
 using AspCoreWebAPIDemos.Entities;
+using AspCoreWebAPIDemos.Models;
 
 namespace AspCoreWebAPIDemos.Services
 {
@@ -14,5 +15,9 @@ namespace AspCoreWebAPIDemos.Services
         Task<RateEntity?> GetRateAsync(int cityId, int rateId);
 
         Task<bool> DoesCityExist(int cityId);
+
+        Task AddRate(int cityId, RateEntity newRate);
+
+        Task<bool> SaveChangesAsync();
     }
 }
