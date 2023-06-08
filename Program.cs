@@ -1,5 +1,7 @@
 using AspCoreWebAPIDemos.DBContexts;
 using AspCoreWebAPIDemos.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -31,6 +33,10 @@ builder.Services.AddTransient<IMailService, LocalMailService>();
 builder.Services.AddDbContext<CityContext>(dbContextOptions => dbContextOptions.UseSqlite("Data Source=City.db"));
 builder.Services.AddScoped<ICityInfoRepository, CityInfoRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddControllers(options =>
+{
+    options.RespectBrowserAcceptHeader = true;
+});
 
 var app = builder.Build();
 
@@ -40,6 +46,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.Use(async (context, next) =>
+{
+    context.Request.Headers["Accept"] = "application/json";
+    await next.Invoke();
+});
 
 app.UseHttpsRedirection();
 

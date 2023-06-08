@@ -1,8 +1,6 @@
 ﻿using AspCoreWebAPIDemos.DBContexts;
 using AspCoreWebAPIDemos.Entities;
-using AspCoreWebAPIDemos.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace AspCoreWebAPIDemos.Services
 {
@@ -20,6 +18,18 @@ namespace AspCoreWebAPIDemos.Services
         public async Task<IEnumerable<CityEntity>> GetCitiesAsync()
         {
             return await _cityContext.City.OrderBy(c => c.Name).ToListAsync();
+        }
+
+        public async Task<IEnumerable<CityEntity>> GetCitiesAsync(string? name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return await GetCitiesAsync();
+            }
+            return await _cityContext.City
+                .Where(c => c.Name.Equals(name.Trim(), StringComparison.OrdinalIgnoreCase))
+                .OrderBy(c => c.Name)
+                .ToListAsync();
         }
 
         public async Task<CityEntity?> GetCityAsync(int cityId, bool includeRate)

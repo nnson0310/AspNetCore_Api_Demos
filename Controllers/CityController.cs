@@ -26,7 +26,7 @@ namespace AspCoreWebAPIDemos.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CityWithoutRate>>> GetAllCities()
+        public async Task<ActionResult<List<CityWithoutRate>>> GetAllCities([FromQuery] string? name)
         {
             //CitiesDataStore dataStore = new();
 
@@ -37,7 +37,7 @@ namespace AspCoreWebAPIDemos.Controllers
 
             //return Ok(dataStore.Cities);
 
-            var cities = await _cityInfoRepository.GetCitiesAsync();
+            var cities = await _cityInfoRepository.GetCitiesAsync(name);
             if (cities is null)
             {
                 return NotFound();
