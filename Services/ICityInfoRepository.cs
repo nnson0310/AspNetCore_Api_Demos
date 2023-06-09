@@ -8,7 +8,7 @@ namespace AspCoreWebAPIDemos.Services
     {
         Task<IEnumerable<CityEntity>> GetCitiesAsync();
 
-        Task<IEnumerable<CityEntity>> GetCitiesAsync(string? name);
+        Task<IEnumerable<CityEntity>> GetCitiesAsync(string? name, string? queryString);
 
         Task<CityEntity?> GetCityAsync(int cityId, bool includeRate);
 

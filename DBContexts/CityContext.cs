@@ -25,12 +25,22 @@ namespace AspCoreWebAPIDemos.DBContexts
                  new CityEntity("Bangkok")
                  {
                      Id = 2,
-                     Description = "This is Thai Lan capital"
+                     Description = "Thai Lan capital where is a very attractive tourist place"
                  },
                   new CityEntity("Beijing")
                   {
                       Id = 3,
-                      Description = "This is a very big city of China"
+                      Description = "China captial with many Chinese traditional food you can taste"
+                  },
+                  new CityEntity("Okinawa")
+                  {
+                      Id = 3,
+                      Description = "A beautiful city of Japan located in the South East"
+                  },
+                  new CityEntity("Paris")
+                  {
+                      Id = 3,
+                      Description = "Kingdom of fashion and France capital. You should definitely visit it at least once."
                   });
 
             modelBuilder.Entity<RateEntity>().HasData(

@@ -1,6 +1,4 @@
-﻿using AspCoreWebAPIDemos.DataStorages;
-using AspCoreWebAPIDemos.Entities;
-using AspCoreWebAPIDemos.Models;
+﻿using AspCoreWebAPIDemos.Models;
 using AspCoreWebAPIDemos.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +14,7 @@ namespace AspCoreWebAPIDemos.Controllers
         private readonly IMapper _mapper;
 
         public CityController(
-            ILogger<CityController> logger, 
+            ILogger<CityController> logger,
             ICityInfoRepository cityInfoRepository,
             IMapper mapper)
         {
@@ -26,7 +24,9 @@ namespace AspCoreWebAPIDemos.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CityWithoutRate>>> GetAllCities([FromQuery] string? name)
+        public async Task<ActionResult<List<CityWithoutRate>>> GetAllCities(
+            [FromQuery] string? name,
+            [FromQuery] string? queryString)
         {
             //CitiesDataStore dataStore = new();
 
@@ -37,7 +37,7 @@ namespace AspCoreWebAPIDemos.Controllers
 
             //return Ok(dataStore.Cities);
 
-            var cities = await _cityInfoRepository.GetCitiesAsync(name);
+            var cities = await _cityInfoRepository.GetCitiesAsync(name, queryString);
             if (cities is null)
             {
                 return NotFound();

@@ -20,16 +20,26 @@ namespace AspCoreWebAPIDemos.Services
             return await _cityContext.City.OrderBy(c => c.Name).ToListAsync();
         }
 
-        public async Task<IEnumerable<CityEntity>> GetCitiesAsync(string? name)
+        public async Task<IEnumerable<CityEntity>> GetCitiesAsync(string? name, string? queryString)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name) && string.IsNullOrWhiteSpace(queryString))
             {
                 return await GetCitiesAsync();
             }
-            return await _cityContext.City
-                .Where(c => c.Name.Equals(name.Trim(), StringComparison.OrdinalIgnoreCase))
-                .OrderBy(c => c.Name)
-                .ToListAsync();
+
+            var cities = _cityContext.City as IQueryable<CityEntity>;
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                cities = cities.Where(c => c.Name == name.Trim());
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryString))
+            {
+                cities = cities.Where(c => c.Name.Contains(queryString.Trim()) || (c.Description != null && c.Description.Contains(queryString.Trim())));
+            }
+
+            return await cities.OrderBy(c => c.Name).ToListAsync();
         }
 
         public async Task<CityEntity?> GetCityAsync(int cityId, bool includeRate)
