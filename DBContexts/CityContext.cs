@@ -34,12 +34,12 @@ namespace AspCoreWebAPIDemos.DBContexts
                   },
                   new CityEntity("Okinawa")
                   {
-                      Id = 3,
+                      Id = 4,
                       Description = "A beautiful city of Japan located in the South East"
                   },
                   new CityEntity("Paris")
                   {
-                      Id = 3,
+                      Id = 5,
                       Description = "Kingdom of fashion and France capital. You should definitely visit it at least once."
                   });
 

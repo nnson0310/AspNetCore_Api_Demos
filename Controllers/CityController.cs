@@ -2,6 +2,7 @@
 using AspCoreWebAPIDemos.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace AspCoreWebAPIDemos.Controllers
 {
@@ -12,6 +13,7 @@ namespace AspCoreWebAPIDemos.Controllers
         private readonly ILogger<CityController> _logger;
         private readonly ICityInfoRepository _cityInfoRepository;
         private readonly IMapper _mapper;
+        private readonly int maxedPageSize = 10;
 
         public CityController(
             ILogger<CityController> logger,
@@ -26,7 +28,9 @@ namespace AspCoreWebAPIDemos.Controllers
         [HttpGet]
         public async Task<ActionResult<List<CityWithoutRate>>> GetAllCities(
             [FromQuery] string? name,
-            [FromQuery] string? queryString)
+            [FromQuery] string? queryString,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 5)
         {
             //CitiesDataStore dataStore = new();
 
@@ -37,11 +41,15 @@ namespace AspCoreWebAPIDemos.Controllers
 
             //return Ok(dataStore.Cities);
 
-            var cities = await _cityInfoRepository.GetCitiesAsync(name, queryString);
-            if (cities is null)
+            if (pageSize > maxedPageSize)
             {
-                return NotFound();
+                pageSize = maxedPageSize;
             }
+
+            var (cities, paginationMetaData) = await _cityInfoRepository.GetCitiesAsync(name, queryString, pageNumber, pageSize);
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetaData));
+
             return Ok(_mapper.Map<List<CityWithoutRate>>(cities));
         }
 

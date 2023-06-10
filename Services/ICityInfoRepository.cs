@@ -1,5 +1,4 @@
-﻿using AspCoreWebAPIDemos.DBContexts;
-using AspCoreWebAPIDemos.Entities;
+﻿using AspCoreWebAPIDemos.Entities;
 using AspCoreWebAPIDemos.Models;
 
 namespace AspCoreWebAPIDemos.Services
@@ -8,7 +7,7 @@ namespace AspCoreWebAPIDemos.Services
     {
         Task<IEnumerable<CityEntity>> GetCitiesAsync();
 
-        Task<IEnumerable<CityEntity>> GetCitiesAsync(string? name, string? queryString);
+        Task<(IEnumerable<CityEntity>, PaginationMetaData)> GetCitiesAsync(string? name, string? queryString, int pageNumber, int pageSize);
 
         Task<CityEntity?> GetCityAsync(int cityId, bool includeRate);
 

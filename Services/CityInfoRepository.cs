@@ -1,5 +1,7 @@
 ﻿using AspCoreWebAPIDemos.DBContexts;
 using AspCoreWebAPIDemos.Entities;
+using AspCoreWebAPIDemos.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspCoreWebAPIDemos.Services
@@ -20,26 +22,35 @@ namespace AspCoreWebAPIDemos.Services
             return await _cityContext.City.OrderBy(c => c.Name).ToListAsync();
         }
 
-        public async Task<IEnumerable<CityEntity>> GetCitiesAsync(string? name, string? queryString)
+        public async Task<(IEnumerable<CityEntity>, PaginationMetaData)> GetCitiesAsync(
+            string? name, 
+            string? queryString,
+            int pageNumber,
+            int pageSize)
         {
-            if (string.IsNullOrEmpty(name) && string.IsNullOrWhiteSpace(queryString))
-            {
-                return await GetCitiesAsync();
-            }
-
             var cities = _cityContext.City as IQueryable<CityEntity>;
 
             if (!string.IsNullOrWhiteSpace(name))
             {
-                cities = cities.Where(c => c.Name == name.Trim());
+                cities = cities.Where(c => c.Name.ToLower() == name.Trim().ToLower());
             }
 
             if (!string.IsNullOrWhiteSpace(queryString))
             {
-                cities = cities.Where(c => c.Name.Contains(queryString.Trim()) || (c.Description != null && c.Description.Contains(queryString.Trim())));
+                cities = cities.Where(c => c.Name.Contains(queryString.Trim()) || (c.Description != null && c.Description.ToLower().Contains(queryString.Trim().ToLower())));
             }
 
-            return await cities.OrderBy(c => c.Name).ToListAsync();
+            var totalItems = await cities.CountAsync();
+
+            var paginationMetaData = new PaginationMetaData(totalItems, pageNumber, pageSize);
+
+            var cititesCollection =  await cities
+                .OrderBy(c => c.Id)
+                .Skip(pageSize * (pageNumber - 1))
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (cititesCollection, paginationMetaData);
         }
 
         public async Task<CityEntity?> GetCityAsync(int cityId, bool includeRate)
