@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspCoreWebAPIDemos.Migrations
 {
     [DbContext(typeof(CityContext))]
-    [Migration("20230606095138_addRateForCitySeeding")]
-    partial class addRateForCitySeeding
+    [Migration("20230611034641_addCityToUserInfo")]
+    partial class addCityToUserInfo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,14 +49,26 @@ namespace AspCoreWebAPIDemos.Migrations
                         new
                         {
                             Id = 2,
-                            Description = "This is Thai Lan capital",
+                            Description = "Thai Lan capital where is a very attractive tourist place",
                             Name = "Bangkok"
                         },
                         new
                         {
                             Id = 3,
-                            Description = "This is a very big city of China",
+                            Description = "China captial with many Chinese traditional food you can taste",
                             Name = "Beijing"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "A beautiful city of Japan located in the South East",
+                            Name = "Okinawa"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Kingdom of fashion and France capital. You should definitely visit it at least once.",
+                            Name = "Paris"
                         });
                 });
 
@@ -99,9 +111,90 @@ namespace AspCoreWebAPIDemos.Migrations
                         new
                         {
                             Id = 3,
+                            CityId = 1,
+                            GuestName = "Sarah Chalez",
+                            Point = 4
+                        },
+                        new
+                        {
+                            Id = 4,
                             CityId = 2,
                             GuestName = "David Micheal",
                             Point = 8
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CityId = 2,
+                            GuestName = "Mariah Ozawa",
+                            Point = 6
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CityId = 3,
+                            GuestName = "Okata Mutan",
+                            Point = 9
+                        });
+                });
+
+            modelBuilder.Entity("AspCoreWebAPIDemos.Entities.UserEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            City = "Ha Noi",
+                            Name = "admin",
+                            Password = "123456"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            City = "Bangkok",
+                            Name = "api_consumer",
+                            Password = "api123"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            City = "Beijing",
+                            Name = "hello_api",
+                            Password = "654321"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            City = "Okinawa",
+                            Name = "apis",
+                            Password = "Api123"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            City = "Paris",
+                            Name = "api_demos",
+                            Password = "666666"
                         });
                 });
 

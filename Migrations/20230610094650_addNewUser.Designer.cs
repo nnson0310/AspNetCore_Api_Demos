@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspCoreWebAPIDemos.Migrations
 {
     [DbContext(typeof(CityContext))]
-    [Migration("20230610031035_addMoreCity")]
-    partial class addMoreCity
+    [Migration("20230610094650_addNewUser")]
+    partial class addNewUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -135,6 +135,39 @@ namespace AspCoreWebAPIDemos.Migrations
                             CityId = 3,
                             GuestName = "Okata Mutan",
                             Point = 9
+                        });
+                });
+
+            modelBuilder.Entity("AspCoreWebAPIDemos.Entities.UserEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "admin",
+                            Password = "123456"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "api_user",
+                            Password = "api123456"
                         });
                 });
 

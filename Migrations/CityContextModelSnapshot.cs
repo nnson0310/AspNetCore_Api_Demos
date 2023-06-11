@@ -135,6 +135,66 @@ namespace AspCoreWebAPIDemos.Migrations
                         });
                 });
 
+            modelBuilder.Entity("AspCoreWebAPIDemos.Entities.UserEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            City = "Ha Noi",
+                            Name = "admin",
+                            Password = "123456"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            City = "Bangkok",
+                            Name = "api_consumer",
+                            Password = "api123"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            City = "Beijing",
+                            Name = "hello_api",
+                            Password = "654321"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            City = "Okinawa",
+                            Name = "apis",
+                            Password = "Api123"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            City = "Paris",
+                            Name = "api_demos",
+                            Password = "666666"
+                        });
+                });
+
             modelBuilder.Entity("AspCoreWebAPIDemos.Models.District", b =>
                 {
                     b.Property<int>("Id")

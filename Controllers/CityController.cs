@@ -1,13 +1,16 @@
 ﻿using AspCoreWebAPIDemos.Models;
 using AspCoreWebAPIDemos.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AspCoreWebAPIDemos.Controllers
 {
     [Route("api/city")]
     [ApiController]
+    [Authorize]
     public class CityController : ControllerBase
     {
         private readonly ILogger<CityController> _logger;
@@ -70,6 +73,40 @@ namespace AspCoreWebAPIDemos.Controllers
             }
 
             return Ok(_mapper.Map<CityWithoutRate>(city));
+        }
+
+        [HttpGet("bangkok/details")]
+        [Authorize(Policy = "MustBeFromBangkok")]
+        public ActionResult GetBangkokCityDetail()
+        {
+            string bangkokDetails = "{" +
+                "\"city\": \"Bangkok\", " +
+                "\"population\": \"10.69 million (2023)\", " +
+                "\"area_cover\": \"1,568 sq km\", " +
+                "\"tourism\": \"The Grand Palace\", " +
+                "\"transportation\": \"bus, taxi (grab), MRT, sky train\"}";
+
+            BangkokDetails? details = JsonSerializer.Deserialize<BangkokDetails>(bangkokDetails);
+
+            return Ok(details);
+        }
+
+        private class BangkokDetails
+        {
+            [JsonPropertyName("city")]
+            public string? City { get; set; }
+
+            [JsonPropertyName("population")]
+            public string? Population { get; set; }
+
+            [JsonPropertyName("area_cover")]
+            public string? AreaCover { get; set; }
+
+            [JsonPropertyName("tourism")]
+            public string? Tourism { get; set; }
+
+            [JsonPropertyName("transportation")]
+            public string? Transportation { get; set; }
         }
     }
 }

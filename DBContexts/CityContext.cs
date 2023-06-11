@@ -9,6 +9,8 @@ namespace AspCoreWebAPIDemos.DBContexts
 
         public DbSet<RateEntity> Rate { get; set; }
 
+        public DbSet<UserEntity> User { get; set; }
+
         public CityContext(DbContextOptions<CityContext> options) : base(options)
         {
 
@@ -86,6 +88,28 @@ namespace AspCoreWebAPIDemos.DBContexts
                       GuestName = "Okata Mutan",
                       Point = 9
                   });
+
+            modelBuilder.Entity<UserEntity>().HasData(
+                new UserEntity("admin", "123456", "Ha Noi")
+                {
+                    Id = 1
+                },
+                new UserEntity("api_consumer", "api123", "Bangkok")
+                {
+                    Id = 2
+                },
+                new UserEntity("hello_api", "654321", "Beijing")
+                {
+                    Id = 3
+                },
+                new UserEntity("apis", "Api123", "Okinawa")
+                {
+                    Id = 4
+                },
+                new UserEntity("api_demos", "666666", "Paris")
+                {
+                    Id = 5
+                });
         }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

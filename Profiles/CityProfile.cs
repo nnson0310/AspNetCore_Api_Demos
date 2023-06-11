@@ -8,6 +8,7 @@ namespace AspCoreWebAPIDemos.Profiles
         {
             CreateMap<Entities.CityEntity, Models.CityWithoutRate>();
             CreateMap<Entities.CityEntity, Models.City>();
+            CreateMap<Entities.UserEntity, Models.User>();
         }
     }
 }

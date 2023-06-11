@@ -1,7 +1,6 @@
 ﻿using AspCoreWebAPIDemos.DBContexts;
 using AspCoreWebAPIDemos.Entities;
 using AspCoreWebAPIDemos.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspCoreWebAPIDemos.Services
@@ -23,7 +22,7 @@ namespace AspCoreWebAPIDemos.Services
         }
 
         public async Task<(IEnumerable<CityEntity>, PaginationMetaData)> GetCitiesAsync(
-            string? name, 
+            string? name,
             string? queryString,
             int pageNumber,
             int pageSize)
@@ -44,7 +43,7 @@ namespace AspCoreWebAPIDemos.Services
 
             var paginationMetaData = new PaginationMetaData(totalItems, pageNumber, pageSize);
 
-            var cititesCollection =  await cities
+            var cititesCollection = await cities
                 .OrderBy(c => c.Id)
                 .Skip(pageSize * (pageNumber - 1))
                 .Take(pageSize)
@@ -94,6 +93,16 @@ namespace AspCoreWebAPIDemos.Services
         public void DeleteRate(RateEntity rate)
         {
             _cityContext.Rate.Remove(rate);
+        }
+
+        public async Task<UserEntity?> GetUserCredentials(string username, string password)
+        {
+            return await _cityContext.User.Where(u => u.Name == username && u.Password == password).FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> DoesCityNameMatchCityId(int? cityId, string? cityName)
+        {
+            return await _cityContext.City.AnyAsync(c => c.Id == cityId && c.Name == cityName);
         }
     }
 }

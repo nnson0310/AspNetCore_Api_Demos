@@ -1,14 +1,15 @@
-﻿using AspCoreWebAPIDemos.DataStorages;
-using AspCoreWebAPIDemos.Entities;
+﻿using AspCoreWebAPIDemos.Entities;
 using AspCoreWebAPIDemos.Models;
 using AspCoreWebAPIDemos.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspCoreWebAPIDemos.Controllers
 {
     [Route("api/city/{cityId}/rate")]
+    [Authorize]
     [ApiController]
     public class RateController : ControllerBase
     {
@@ -33,6 +34,13 @@ namespace AspCoreWebAPIDemos.Controllers
         [Produces("application/json")]
         public async Task<IActionResult> GetRateOfCity(int cityId, int rateId)
         {
+            var cityName = User.Claims.FirstOrDefault(u => u.Type == "city")?.Value;
+
+            if (!await _cityInfoRepository.DoesCityNameMatchCityId(cityId, cityName))
+            {
+                return Forbid();
+            }
+
             if (!await _cityInfoRepository.DoesCityExist(cityId))
             {
                 return NotFound($"Can not find city with id = {cityId}");
@@ -52,6 +60,13 @@ namespace AspCoreWebAPIDemos.Controllers
         [Produces("application/json")]
         public async Task<ActionResult<List<Rate>>> GetAllRatesOfCity(int cityId)
         {
+            var cityName = User.Claims.FirstOrDefault(u => u.Type == "city")?.Value;
+
+            if (!await _cityInfoRepository.DoesCityNameMatchCityId(cityId, cityName))
+            {
+                return Forbid();
+            }
+
             if (!await _cityInfoRepository.DoesCityExist(cityId))
             {
                 return NotFound($"Can not find city with id = {cityId}");

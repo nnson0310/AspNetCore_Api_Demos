@@ -15,6 +15,8 @@ namespace AspCoreWebAPIDemos.Services
 
         Task<RateEntity?> GetRateAsync(int cityId, int rateId);
 
+        Task<UserEntity?> GetUserCredentials(string username, string password);  
+
         Task<bool> DoesCityExist(int cityId);
 
         Task AddRate(int cityId, RateEntity newRate);
@@ -22,5 +24,7 @@ namespace AspCoreWebAPIDemos.Services
         Task<bool> SaveChangesAsync();
 
         void DeleteRate(RateEntity rate);
+
+        Task<bool> DoesCityNameMatchCityId(int? cityId, string? cityName);
     }
 }
