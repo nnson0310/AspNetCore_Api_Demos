@@ -8,8 +8,9 @@ using System.Text.Json.Serialization;
 
 namespace AspCoreWebAPIDemos.Controllers
 {
-    [Route("api/city")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/city")]
     [Authorize]
     public class CityController : ControllerBase
     {
@@ -28,6 +29,14 @@ namespace AspCoreWebAPIDemos.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        /// <summary>
+        /// Get all information of cities
+        /// </summary>
+        /// <param name="name">Name of city</param>
+        /// <param name="queryString">Query string to search exact city</param>
+        /// <param name="pageNumber">Number of page (used in pagination)</param>
+        /// <param name="pageSize">Result per page</param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<List<CityWithoutRate>>> GetAllCities(
             [FromQuery] string? name,

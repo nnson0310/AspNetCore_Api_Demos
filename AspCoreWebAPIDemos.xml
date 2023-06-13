@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AspCoreWebAPIDemos</name>
+    </assembly>
+    <members>
+        <member name="M:AspCoreWebAPIDemos.Controllers.CityController.GetAllCities(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Get all information of cities
+            </summary>
+            <param name="name">Name of city</param>
+            <param name="queryString">Query string to search exact city</param>
+            <param name="pageNumber">Number of page (used in pagination)</param>
+            <param name="pageSize">Result per page</param>
+            <returns></returns>
+        </member>
+        <member name="T:AspCoreWebAPIDemos.Migrations.addNewUser">
+            <inheritdoc />
+        </member>
+        <member name="M:AspCoreWebAPIDemos.Migrations.addNewUser.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:AspCoreWebAPIDemos.Migrations.addNewUser.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:AspCoreWebAPIDemos.Migrations.addNewUser.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:AspCoreWebAPIDemos.Migrations.addCityToUserInfo">
+            <inheritdoc />
+        </member>
+        <member name="M:AspCoreWebAPIDemos.Migrations.addCityToUserInfo.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:AspCoreWebAPIDemos.Migrations.addCityToUserInfo.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:AspCoreWebAPIDemos.Migrations.addCityToUserInfo.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

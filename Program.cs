@@ -1,12 +1,12 @@
 using AspCoreWebAPIDemos.DBContexts;
 using AspCoreWebAPIDemos.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Reflection;
 using System.Text;
+using Microsoft.OpenApi.Models;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
@@ -29,12 +29,48 @@ builder.Services.AddControllers(
     .AddXmlDataContractSerializerFormatters();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(setupOption =>
+{
+    var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlFilePath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
+
+    setupOption.IncludeXmlComments(xmlFilePath);
+
+    setupOption.AddSecurityDefinition("AspNetApiWebSecurity", new OpenApiSecurityScheme()
+    {
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        Description = "Input a valid Bearer token to access this resource"
+    });
+
+    setupOption.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme()
+            {
+                Reference = new OpenApiReference()
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "AspNetApiWebSecurity"
+                }
+            }, new List<string>()
+        }
+    });
+});
+
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 builder.Services.AddTransient<IMailService, LocalMailService>();
 builder.Services.AddDbContext<CityContext>(dbContextOptions => dbContextOptions.UseSqlite("Data Source=City.db"));
 builder.Services.AddScoped<ICityInfoRepository, CityInfoRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddApiVersioning(setupOption =>
+{
+    setupOption.AssumeDefaultVersionWhenUnspecified = true;
+    setupOption.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    setupOption.ReportApiVersions = true;
+});
 
 builder.Services.AddControllers(options =>
 {
